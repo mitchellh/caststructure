@@ -37,6 +37,9 @@ func Interface(from interface{}, to ...interface{}) (interface{}, error) {
 	fields := make([]reflect.StructField, len(to))
 	for i, typPtr := range to {
 		typ := reflect.TypeOf(typPtr)
+		if typ == nil {
+			return nil, fmt.Errorf("to type must be a pointer, got nil value")
+		}
 		if typ.Kind() != reflect.Ptr {
 			return nil, fmt.Errorf("to type must be a pointer, got %s", typ.String())
 		}

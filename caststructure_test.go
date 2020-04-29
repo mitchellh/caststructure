@@ -4,10 +4,10 @@ import (
 	"testing"
 )
 
-func TestInterface(t *testing.T) {
+func TestDown(t *testing.T) {
 	var from impl
 
-	value, err := Interface(from, (*testA)(nil), (*TestB)(nil))
+	value, err := Down(from, (*testA)(nil), (*TestB)(nil))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,17 +23,17 @@ func TestInterface(t *testing.T) {
 	}
 }
 
-func TestInterface_nonImpl(t *testing.T) {
+func TestDown_nonImpl(t *testing.T) {
 	from := 42
-	_, err := Interface(from, (*testA)(nil))
+	_, err := Down(from, (*testA)(nil))
 	if err == nil {
 		t.Fatal("should error")
 	}
 }
 
-func TestInterface_nonPtr(t *testing.T) {
+func TestDown_nonPtr(t *testing.T) {
 	var from impl
-	_, err := Interface(from, (testA)(nil))
+	_, err := Down(from, (testA)(nil))
 	if err == nil {
 		t.Fatal("should error")
 	}

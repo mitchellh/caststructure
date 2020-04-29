@@ -33,7 +33,7 @@ func (Impl) C() int { return 42 }
 var value Impl
 
 // But we only want value to implement A and B, not C.
-newValue := caststructure.Must(caststructure.Interface(value, (*A)(nil), (*B)(nil)))
+newValue := caststructure.Must(caststructure.Down(value, (*A)(nil), (*B)(nil)))
 _, ok := newValue.(A) // ok == true
 _, ok := newValue.(B) // ok == true
 _, ok := newValue.(C) // ok == false

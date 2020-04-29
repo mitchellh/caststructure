@@ -20,7 +20,7 @@ func Must(v interface{}, err error) interface{} {
 	return v
 }
 
-// Interface converts the value "from" to a type that implements the list
+// Down downcasts the value "from" to a type that implements the list
 // of interfaces "to". The "from" value must already implement these interfaces.
 // This is typically used to downcast a value that implements other interfaces
 // to one that only implements the given list.
@@ -28,7 +28,7 @@ func Must(v interface{}, err error) interface{} {
 // An error will be returned if from doesn't implement any one of the to values,
 // or creating the structure fails (due to overlapping interface implements,
 // unexported types being used, etc.).
-func Interface(from interface{}, to ...interface{}) (interface{}, error) {
+func Down(from interface{}, to ...interface{}) (interface{}, error) {
 	fromVal := reflect.ValueOf(from)
 	fromTyp := fromVal.Type()
 

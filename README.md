@@ -66,6 +66,18 @@ _, ok := newValue.(B) // ok == true
 
 ## But... Why?
 
+In general, what this library achieves can be done manually through
+explicit type declarations. For example, composing `A` and `B` can be
+done [explicitly like this](https://play.golang.org/p/It0NHvZt_-w). But in
+cases where the set of interfaces is large and the combinations dynamic,
+creating explicit types becomes a burden.
+
+Some Go code allows optionally implementing interfaces to change behavior.
+For example, code might check if `io.Closer` is implemented and call it. If
+it is not implemented, it isn't an error, it just isn't called. Taking this
+further, some Go code has numerous opt-in interfaces to change behavior. This
+library was born out of the need to work with such APIs.
+
 For downcasing, you might get a value that implements interfaces `A`, `B`, `C` and you
 want to return a value that only implements `A` and `B`. If this is the only
 scenario, you can manually create a [new interface type](https://play.golang.org/p/Sgn7MhsyrXt).

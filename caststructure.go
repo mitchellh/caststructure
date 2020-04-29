@@ -66,3 +66,57 @@ func Interface(from interface{}, to ...interface{}) (interface{}, error) {
 
 	return resultVal.Interface(), nil
 }
+
+// Compose composes multiple types into a single type. For example if you
+// have a value that implements A and another that implements B, this can
+// compose those two values into a single value that implements both A and B.
+//
+// The arguments to this must be a list of pairs in (value, type) order.
+// For example:
+//
+//     Compose(a, (*A)(nil), b, (*B)(nil))
+//
+func Compose(pairs ...interface{}) (interface{}, error) {
+	if len(pairs)%2 != 0 {
+		return nil, fmt.Errorf("Compose requires an even number of arguments since they're pairs")
+	}
+
+	fields := make([]reflect.StructField, 0, len(pairs)/2)
+	values := make([]reflect.Value, 0, len(pairs)/2)
+	for i := 0; i < len(pairs); i += 2 {
+		pairVal := reflect.ValueOf(pairs[i])
+		pairTyp := pairs[i+1]
+
+		typ := reflect.TypeOf(pairTyp)
+		if typ == nil {
+			return nil, fmt.Errorf("to type must be a pointer, got nil value")
+		}
+		if typ.Kind() != reflect.Ptr {
+			return nil, fmt.Errorf("to type must be a pointer, got %s", typ.String())
+		}
+		typ = typ.Elem()
+
+		// Ensure our from value maps to this
+		if !pairVal.Type().AssignableTo(typ) {
+			return nil, fmt.Errorf("value is not assignable to destination type %s", typ.String())
+		}
+
+		// Build the field
+		fields = append(fields, reflect.StructField{
+			Name:      "A_" + typ.Name(), // Force capitalization so its exported
+			Type:      typ,
+			Anonymous: true, // Anonymous so it is embedded
+		})
+
+		// Build the value
+		values = append(values, pairVal)
+	}
+
+	// Make our structure
+	resultVal := reflect.New(reflect.StructOf(fields)).Elem()
+	for i := 0; i < len(fields); i++ {
+		resultVal.Field(i).Set(values[i])
+	}
+
+	return resultVal.Interface(), nil
+}

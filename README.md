@@ -1,3 +1,12 @@
+# ⛔️ THIS DOESN'T WORK ⛔️
+
+The functionality provided by this library unfortunately doesn't work due
+to limitations of the Go `reflect` package and runtime. I believe if these 
+issues are resolved, the code here should work as-is and tests should begin
+passing. 
+
+The Go issues related to this are rooted here: https://github.com/golang/go/issues/38783
+
 # caststructure [![Godoc](https://godoc.org/github.com/mitchellh/caststructure?status.svg)](https://godoc.org/github.com/mitchellh/caststructure)
 
 caststructure is a Go library that provides functions for downcasting types,

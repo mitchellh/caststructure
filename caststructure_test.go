@@ -12,11 +12,16 @@ func TestDown(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, ok := value.(testA); !ok {
+	value.(testA).A()
+	if v, ok := value.(testA); !ok {
 		t.Fatal("should implement A")
+	} else if v.A() != 42 {
+		t.Fatal("invalid value")
 	}
-	if _, ok := value.(TestB); !ok {
+	if v, ok := value.(TestB); !ok {
 		t.Fatal("should implement B")
+	} else if v.B() != 42 {
+		t.Fatal("invalid value")
 	}
 	if _, ok := value.(testC); ok {
 		t.Fatal("should not implement C")
